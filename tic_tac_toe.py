@@ -78,66 +78,90 @@ def set_mode(selection):
     reset_game()
 
 
-# Create the main window
-window = tk.Tk()
-window.title("Tic Tac Toe")
+def open_tic_tac_toe():
+    menu.destroy()
 
-# Create a frame for the game board
-board_frame = tk.Frame(window, bg="black")
-board_frame.pack(pady=10)
+    # Create the main window
+    window = tk.Tk()
+    window.title("Tic Tac Toe")
 
-# Create the game board buttons
-buttons = []
-for row in range(3):
-    button_row = []
-    for col in range(3):
-        button = tk.Button(
-            board_frame,
-            text=" ",
-            font=("Arial", 20),
-            width=6,
-            height=3,
-            command=lambda r=row, c=col: make_move(r, c)
-        )
-        button.grid(row=row, column=col, padx=5, pady=5)
-        button_row.append(button)
-    buttons.append(button_row)
+    # Create a frame for the game board
+    board_frame = tk.Frame(window, bg="black")
+    board_frame.pack(pady=10)
 
-# Create a frame for the mode selection
-mode_frame = tk.Frame(window)
-mode_frame.pack(pady=10)
+    # Create the game board buttons
+    buttons = []
+    for row in range(3):
+        button_row = []
+        for col in range(3):
+            button = tk.Button(
+                board_frame,
+                text=" ",
+                font=("Arial", 20),
+                width=6,
+                height=3,
+                command=lambda r=row, c=col: make_move(r, c)
+            )
+            button.grid(row=row, column=col, padx=5, pady=5)
+            button_row.append(button)
+        buttons.append(button_row)
 
-# Create the mode selection radio buttons
-mode = tk.StringVar(value="multiplayer")
-multiplayer_radio = tk.Radiobutton(
-    mode_frame,
-    text="Multiplayer",
-    variable=mode,
-    value="multiplayer",
-    command=lambda: set_mode("multiplayer")
-)
-multiplayer_radio.grid(row=0, column=0, padx=5)
-robot_radio = tk.Radiobutton(
-    mode_frame,
-    text="Against Bot",
-    variable=mode,
-    value="robot",
-    command=lambda: set_mode("robot")
-)
-robot_radio.grid(row=0, column=1, padx=5)
+    # Create a frame for the mode selection
+    mode_frame = tk.Frame(window)
+    mode_frame.pack(pady=10)
 
-# Create a reset button
-reset_button = tk.Button(
-    window,
-    text="Reset",
+    # Create the mode selection radio buttons
+    mode = tk.StringVar(value="multiplayer")
+    multiplayer_radio = tk.Radiobutton(
+        mode_frame,
+        text="Multiplayer",
+        variable=mode,
+        value="multiplayer",
+        command=lambda: set_mode("multiplayer")
+    )
+    multiplayer_radio.grid(row=0, column=0, padx=5)
+    robot_radio = tk.Radiobutton(
+        mode_frame,
+        text="Against Bot",
+        variable=mode,
+        value="robot",
+        command=lambda: set_mode("robot")
+    )
+    robot_radio.grid(row=0, column=1, padx=5)
+
+    # Create a reset button
+    reset_button = tk.Button(
+        window,
+        text="Reset",
+        font=("Arial", 14),
+        command=reset_game
+    )
+    reset_button.pack(pady=10)
+
+    # Initialize the game
+    board = [[" " for _ in range(3)] for _ in range(3)]
+    current_player = "X"
+
+    # Start the main event loop
+    window.mainloop()
+
+
+# Create the main menu
+menu = tk.Tk()
+menu.title("Game Menu")
+
+# Create a label for the menu
+label = tk.Label(menu, text="Select a game:")
+label.pack(pady=20)
+
+# Create buttons for each game
+tic_tac_toe_button = tk.Button(
+    menu,
+    text="Tic Tac Toe",
     font=("Arial", 14),
-    command=reset_game
+    command=open_tic_tac_toe
 )
-reset_button.pack(pady=10)
+tic_tac_toe_button.pack(pady=10)
 
-# Initialize the game
-board = [[" " for _ in range(3)] for _ in range(3)]
-current_player = "X"
-
-# Start the main event loop
-window.mainloop()
+# Start the main event loop for the menu
+menu.mainloop()
