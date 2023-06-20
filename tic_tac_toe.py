@@ -45,16 +45,14 @@ def make_move(row, col):
     elif all(board[row][col] != " " for row in range(3) for col in range(3)):
         messagebox.showinfo("Game Over", "It's a tie!")
         reset_game()
+    elif mode == "robot" and current_player == "X":
+        make_robot_move()
     else:
         current_player = "O" if current_player == "X" else "X"
 
 
 def make_robot_move():
-    empty_cells = []
-    for row in range(3):
-        for col in range(3):
-            if board[row][col] == " ":
-                empty_cells.append((row, col))
+    empty_cells = [(row, col) for row in range(3) for col in range(3) if board[row][col] == " "]
 
     if empty_cells:
         row, col = random.choice(empty_cells)
@@ -121,7 +119,7 @@ multiplayer_radio = tk.Radiobutton(
 multiplayer_radio.grid(row=0, column=0, padx=5)
 robot_radio = tk.Radiobutton(
     mode_frame,
-    text="Against Robot",
+    text="Against Bot",
     variable=mode,
     value="robot",
     command=lambda: set_mode("robot")
