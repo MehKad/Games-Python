@@ -84,8 +84,10 @@ def open_tic_tac_toe():
     menu.withdraw()
 
     # Create the main window for Tic Tac Toe
-    window = tk.Tk()
+    window = tk.Toplevel()
     window.title("Tic Tac Toe")
+    window.geometry("400x600")
+    window.resizable(False, False)
 
     def back_to_menu():
         window.destroy()
@@ -157,13 +159,35 @@ def open_tic_tac_toe():
     board = [[" " for _ in range(3)] for _ in range(3)]
     current_player = "X"
 
-    # Start the main event loop for the Tic Tac Toe window
-    window.mainloop()
+
+def open_pong():
+    global menu
+    menu.withdraw()
+
+    # Create the Pong window
+    pong_window = tk.Toplevel()
+    pong_window.title("Pong")
+    pong_window.geometry("400x600")
+    pong_window.resizable(False, False)
+
+    def back_to_menu():
+        pong_window.destroy()
+        menu.deiconify()
+
+    # Create a label for Pong
+    label = tk.Label(pong_window, text="Pong Game", font=("Arial", 20))
+    label.pack(pady=20)
+
+    # Create a back button
+    back_button = tk.Button(pong_window, text="Back to Menu", font=("Arial", 14), command=back_to_menu)
+    back_button.pack(pady=10)
 
 
 # Create the main menu
 menu = tk.Tk()
 menu.title("Game Menu")
+menu.geometry("400x600")
+menu.resizable(False, False)
 
 # Create a label for the menu
 label = tk.Label(menu, text="Select a game:", font=("Arial", 20))
@@ -174,11 +198,21 @@ tic_tac_toe_button = tk.Button(
     menu,
     text="Tic Tac Toe",
     font=("Arial", 14),
-    width=15,
+    width=25,
     height=2,
     command=open_tic_tac_toe
 )
 tic_tac_toe_button.pack(pady=10)
+
+pong_button = tk.Button(
+    menu,
+    text="Pong",
+    font=("Arial", 14),
+    width=25,
+    height=2,
+    command=open_pong
+)
+pong_button.pack(pady=10)
 
 # Start the main event loop for the menu
 menu.mainloop()
