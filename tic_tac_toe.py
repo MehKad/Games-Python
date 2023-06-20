@@ -79,11 +79,17 @@ def set_mode(selection):
 
 
 def open_tic_tac_toe():
-    menu.destroy()
+    global menu
 
-    # Create the main window
+    menu.withdraw()
+
+    # Create the main window for Tic Tac Toe
     window = tk.Tk()
     window.title("Tic Tac Toe")
+
+    def back_to_menu():
+        window.destroy()
+        menu.deiconify()
 
     # Create a frame for the game board
     board_frame = tk.Frame(window, bg="black")
@@ -138,11 +144,20 @@ def open_tic_tac_toe():
     )
     reset_button.pack(pady=10)
 
+    # Create a back button
+    back_button = tk.Button(
+        window,
+        text="Back to Menu",
+        font=("Arial", 14),
+        command=back_to_menu
+    )
+    back_button.pack(pady=10)
+
     # Initialize the game
     board = [[" " for _ in range(3)] for _ in range(3)]
     current_player = "X"
 
-    # Start the main event loop
+    # Start the main event loop for the Tic Tac Toe window
     window.mainloop()
 
 
