@@ -1,7 +1,14 @@
 import random
 import tkinter as tk
 from tkinter import messagebox
+import ctypes
 
+# Set the gamingpad icon as the favicon for Tkinter windows
+gamingpad_icon_path = "gamepad.png"
+
+# Load the icon using ctypes
+gamingpad_icon = ctypes.windll.shell32.Shell_NotifyIconW
+gamingpad_icon_id = 0x201
 
 def print_board(board):
     for row in board:
@@ -89,6 +96,9 @@ def open_tic_tac_toe():
     window.geometry("400x600")
     window.resizable(False, False)
 
+    # Set the gamingpad icon for the Tkinter menu window (tic tac toe menu)
+    window.wm_iconbitmap(gamingpad_icon_path)
+
     def back_to_menu():
         window.destroy()
         menu.deiconify()
@@ -170,6 +180,9 @@ def open_pong():
     pong_window.geometry("400x600")
     pong_window.resizable(False, False)
 
+    # Set the gamingpad icon for the Tkinter menu window
+    pong_window.wm_iconbitmap(gamingpad_icon_path)
+
     def back_to_menu():
         pong_window.destroy()
         menu.deiconify()
@@ -188,6 +201,9 @@ menu = tk.Tk()
 menu.title("Game Menu")
 menu.geometry("400x600")
 menu.resizable(False, False)
+
+# Set the gamingpad icon for the Tkinter menu window
+menu.iconbitmap(gamingpad_icon_path)
 
 # Create a label for the menu
 label = tk.Label(menu, text="Select a game:", font=("Arial", 20))
