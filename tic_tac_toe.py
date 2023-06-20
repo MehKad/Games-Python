@@ -52,18 +52,37 @@ def make_move(row, col):
     elif all(board[row][col] != " " for row in range(3) for col in range(3)):
         messagebox.showinfo("Game Over", "It's a tie!")
         reset_game()
-    elif mode == "robot" and current_player == "X":
+    elif mode == "robot" and current_player == player_symbols[0]:
         make_robot_move()
+        if not check_winner(board, player_symbols[0]) and not all(
+            board[row][col] != " " for row in range(3) for col in range(3)
+        ):
+            current_player = player_symbols[0]  # Switch the player's symbol only if the game is not over
     else:
-        current_player = "O" if current_player == "X" else "X"
+        current_player = player_symbols[1] if current_player == player_symbols[0] else player_symbols[0]
 
 
 def make_robot_move():
+    global current_player  # Declare current_player as a global variable
+
     empty_cells = [(row, col) for row in range(3) for col in range(3) if board[row][col] == " "]
 
     if empty_cells:
         row, col = random.choice(empty_cells)
-        make_move(row, col)
+        player = player_symbols[1]  # Use the opposite symbol of the current player
+        board[row][col] = player
+        button = buttons[row][col]
+        button.config(text=player, state=tk.DISABLED)
+
+        if check_winner(board, player):
+            messagebox.showinfo("Game Over", f"Player {player} wins!")
+            reset_game()
+        elif all(board[row][col] != " " for row in range(3) for col in range(3)):
+            messagebox.showinfo("Game Over", "It's a tie!")
+            reset_game()
+
+    # Switch the current player before making the move
+    current_player = player_symbols[0] if current_player == player_symbols[1] else player_symbols[1]
 
 
 def reset_game():
@@ -76,12 +95,13 @@ def reset_game():
             button = buttons[row][col]
             button.config(text=" ", state=tk.NORMAL)
 
-    current_player = "X"
+    current_player = player_symbols[0]
 
 
 def set_mode(selection):
-    global mode
+    global mode, player_symbols
     mode = selection
+    player_symbols = ("X", "O") if mode == "multiplayer" else ("X", "O")  # Assign symbols based on the mode
     reset_game()
 
 
@@ -167,7 +187,8 @@ def open_tic_tac_toe():
 
     # Initialize the game
     board = [[" " for _ in range(3)] for _ in range(3)]
-    current_player = "X"
+    player_symbols = ("X", "O")
+    current_player = player_symbols[0]
 
 
 def open_pong():
