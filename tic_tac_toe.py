@@ -79,7 +79,7 @@ def set_mode(selection):
 
 
 def open_tic_tac_toe():
-    global menu
+    global menu, buttons
 
     menu.withdraw()
 
@@ -166,7 +166,7 @@ menu = tk.Tk()
 menu.title("Game Menu")
 
 # Create a label for the menu
-label = tk.Label(menu, text="Select a game:")
+label = tk.Label(menu, text="Select a game:", font=("Arial", 20))
 label.pack(pady=20)
 
 # Create buttons for each game
@@ -174,6 +174,8 @@ tic_tac_toe_button = tk.Button(
     menu,
     text="Tic Tac Toe",
     font=("Arial", 14),
+    width=15,
+    height=2,
     command=open_tic_tac_toe
 )
 tic_tac_toe_button.pack(pady=10)
