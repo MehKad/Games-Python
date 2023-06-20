@@ -2,7 +2,12 @@ import random
 import tkinter as tk
 from tkinter import messagebox
 
-# Function to check the game status
+
+def print_board(board):
+    for row in board:
+        print(row)
+
+
 def check_winner(board, player):
     # Check rows
     for row in board:
@@ -22,7 +27,7 @@ def check_winner(board, player):
 
     return False
 
-# Function to handle button clicks
+
 def make_move(row, col):
     global board, current_player, buttons
 
@@ -42,24 +47,38 @@ def make_move(row, col):
         reset_game()
     else:
         current_player = "O" if current_player == "X" else "X"
-        player_label.config(text=f"Current Player: {current_player}")
 
-# Function to reset the game
+
+def make_robot_move():
+    empty_cells = []
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == " ":
+                empty_cells.append((row, col))
+
+    if empty_cells:
+        row, col = random.choice(empty_cells)
+        make_move(row, col)
+
+
 def reset_game():
     global board, current_player
 
-    # Clear the board
     board = [[" " for _ in range(3)] for _ in range(3)]
-    
-    # Reset buttons and enable them
+
     for row in range(3):
         for col in range(3):
             button = buttons[row][col]
             button.config(text=" ", state=tk.NORMAL)
-    
-    # Randomly choose starting player
-    current_player = random.choice(["X", "O"])
-    player_label.config(text=f"Current Player: {current_player}")
+
+    current_player = "X"
+
+
+def set_mode(selection):
+    global mode
+    mode = selection
+    reset_game()
+
 
 # Create the main window
 window = tk.Tk()
@@ -86,22 +105,41 @@ for row in range(3):
         button_row.append(button)
     buttons.append(button_row)
 
-# Create a frame for the player label and reset button
-controls_frame = tk.Frame(window)
-controls_frame.pack(pady=10)
+# Create a frame for the mode selection
+mode_frame = tk.Frame(window)
+mode_frame.pack(pady=10)
 
-# Create a label to display the current player
-player_label = tk.Label(controls_frame, text="Current Player: X", font=("Arial", 14))
-player_label.grid(row=0, column=0, padx=10)
+# Create the mode selection radio buttons
+mode = tk.StringVar(value="multiplayer")
+multiplayer_radio = tk.Radiobutton(
+    mode_frame,
+    text="Multiplayer",
+    variable=mode,
+    value="multiplayer",
+    command=lambda: set_mode("multiplayer")
+)
+multiplayer_radio.grid(row=0, column=0, padx=5)
+robot_radio = tk.Radiobutton(
+    mode_frame,
+    text="Against Robot",
+    variable=mode,
+    value="robot",
+    command=lambda: set_mode("robot")
+)
+robot_radio.grid(row=0, column=1, padx=5)
 
 # Create a reset button
-reset_button = tk.Button(controls_frame, text="Reset", font=("Arial", 14), command=reset_game)
-reset_button.grid(row=0, column=1, padx=10)
+reset_button = tk.Button(
+    window,
+    text="Reset",
+    font=("Arial", 14),
+    command=reset_game
+)
+reset_button.pack(pady=10)
 
 # Initialize the game
 board = [[" " for _ in range(3)] for _ in range(3)]
-current_player = random.choice(["X", "O"])
-player_label.config(text=f"Current Player: {current_player}")
+current_player = "X"
 
 # Start the main event loop
 window.mainloop()
