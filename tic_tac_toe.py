@@ -14,7 +14,7 @@ def print_board(board):
     for row in board:
         print(row)
 
-
+# Tic-Tac-Toe start
 def check_winner(board, player):
     # Check rows
     for row in board:
@@ -191,8 +191,47 @@ def open_tic_tac_toe():
     current_player = player_symbols[0]
 
 
+# Pong game variables
+ball_speed = 5
+paddle_speed = 8
+
+# Pong game functions
+def move_ball():
+    global ball_speed, ball_x, ball_y
+
+    ball_x += ball_speed
+    ball_y += ball_speed
+
+    if ball_x >= 390 or ball_x <= 10:
+        ball_speed *= -1
+    if ball_y >= 590 or ball_y <= 10:
+        ball_speed *= -1
+
+    pong_canvas.move(ball, ball_speed, ball_speed)
+    pong_window.after(50, move_ball)
+
+def move_paddle(event):
+    paddle_pos = pong_canvas.coords(player_paddle)
+    y = event.y
+
+    if y < 0:
+        y = 0
+    elif y > 600:
+        y = 600
+
+    pong_canvas.move(player_paddle, 0, y - paddle_pos[1])
+
+
+def start_game():
+    global ball_x, ball_y
+    ball_x, ball_y = 200, 200
+    move_ball()
+
+
+
 def open_pong():
-    global menu
+    global menu, pong_window, pong_canvas, ball, player_paddle
+
     menu.withdraw()
 
     # Create the Pong window
@@ -204,17 +243,20 @@ def open_pong():
     # Set the gamingpad icon for the Tkinter menu window
     pong_window.wm_iconbitmap(gamingpad_icon_path)
 
-    def back_to_menu():
-        pong_window.destroy()
-        menu.deiconify()
+    # Create the canvas for the Pong game
+    pong_canvas = tk.Canvas(pong_window, width=400, height=600, bg="black")
+    pong_canvas.pack()
 
-    # Create a label for Pong
-    label = tk.Label(pong_window, text="Pong Game", font=("Arial", 20))
-    label.pack(pady=20)
+    # Create the ball
+    ball = pong_canvas.create_oval(190, 290, 210, 310, fill="white")
 
-    # Create a back button
-    back_button = tk.Button(pong_window, text="Back to Menu", font=("Arial", 14), command=back_to_menu)
-    back_button.pack(pady=10)
+    # Create the player's paddle
+    player_paddle = pong_canvas.create_rectangle(10, 250, 30, 350, fill="white")
+
+    # Bind the paddle movement to mouse movement
+    pong_canvas.bind("<Motion>", move_paddle)
+
+    start_game()
 
 
 # Create the main menu
